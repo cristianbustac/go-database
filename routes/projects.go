@@ -1,14 +1,15 @@
 package routes
 
-// import (
-// 	controller "go-backend/controllers"
+import (
+	controller "go-backend/controllers"
 
-// 	"github.com/gin-gonic/gin"
-// )
+	"github.com/gin-gonic/gin"
+)
 
-// func ProjectsRoutes(incomingRoutes *gin.Engine) {
-// 	incomingRoutes.GET("/projects", controller.GetProjects())
-// 	incomingRoutes.GET("/projects/:project_id", controller.GetProject())
-// 	incomingRoutes.POST("/projects", controller.CreateProject())
-// 	incomingRoutes.PATCH("/projects/:project_id", controller.UpdateProject())
-// }
+func ProjectsRoutes(incomingRoutes *gin.Engine) {
+	incomingRoutes.GET("/projects", controller.Getprojects)
+	incomingRoutes.GET("/projects/:project_id", controller.Getproject)
+	incomingRoutes.POST("/projects", controller.Postproject)
+	incomingRoutes.PATCH("/projects/:project_id", controller.Patchproject)
+	incomingRoutes.DELETE("/projects/:project_id", controller.Deleteproject)
+}

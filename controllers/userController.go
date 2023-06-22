@@ -3,9 +3,11 @@ package controller
 import (
 	"encoding/json"
 	"go-backend/database"
+	"go-backend/database/repositories"
 	"go-backend/models"
 	"go-backend/schemas"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,14 +20,33 @@ import (
 // @Produce json
 // @Success 200
 // @Router /users [get]
+// @Param skip query int false "skip" default(0)
+// @Param limit query int false "limit" default(10)
 func GetUsers(context *gin.Context) {
-	var users []*models.User
-	users_res := database.DB.Find(&users).Offset(0).Limit(10)
-	if users_res.Error != nil {
+	skip, err := strconv.Atoi(context.DefaultQuery("skip", "0"))
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "invalid value for skip"})
+		return
+	}
+
+	limit, err := strconv.Atoi(context.DefaultQuery("limit", "10"))
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "invalid value for limit"})
+		return
+	}
+	var user models.User
+	var users []models.User
+	userRepo := repositories.NewUserRepository(database.DB)
+	usersRes, err := userRepo.GetAll(&user, skip, limit)
+	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "failed to retrieve users"})
 		return
 	}
-	context.JSON(http.StatusOK, users)
+	if err := usersRes.Find(&users).Error; err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "failed to retrieve users"})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"users": users})
 }
 
 // get user
@@ -38,14 +59,15 @@ func GetUsers(context *gin.Context) {
 // @Success 200
 // @Router /users/{user_id} [get]
 func GetUser(context *gin.Context) {
+	var user models.User
 	userId := context.Param("user_id")
-	var user []*models.User
-	user_res := database.DB.First(&user, userId)
-	if user_res.Error != nil {
+	userRepo := repositories.NewUserRepository(database.DB)
+	userEntity, err := userRepo.GetById(userId, &user)
+	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "failed to retrieve user"})
 		return
 	}
-	context.JSON(http.StatusOK, user)
+	context.JSON(http.StatusOK, userEntity)
 }
 
 // post user
@@ -60,12 +82,12 @@ func GetUser(context *gin.Context) {
 func PostUser(context *gin.Context) {
 	var user models.User
 	json.NewDecoder(context.Request.Body).Decode(&user)
-	createUser := database.DB.Create(&user)
-	err := createUser.Error
+	userRepo := repositories.NewUserRepository(database.DB)
+	createUser, err := userRepo.Create(&user)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, "error creating user")
 	}
-	context.JSON(http.StatusOK, &user)
+	context.JSON(http.StatusOK, createUser)
 }
 
 // patch user
@@ -83,21 +105,17 @@ func PatchUser(context *gin.Context) {
 	userId := context.Param("user_id")
 
 	var updatedUser schemas.UserUpdate
-	userDb := database.DB.First(&user, userId)
-	if userDb.Error != nil {
-		context.JSON(http.StatusBadRequest, "error getting the user")
-	}
 	if err := context.ShouldBindJSON(&updatedUser); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	user_res := database.DB.Model(&user).Updates(&updatedUser)
-	if user_res.Error != nil {
+	userRepo := repositories.NewUserRepository(database.DB)
+	userRes, err := userRepo.Update(userId, &user, &updatedUser)
+	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update user"})
 		return
 	}
-	database.DB.First(&user, userId)
-	context.JSON(http.StatusOK, user)
+	context.JSON(http.StatusOK, userRes)
 }
 
 // delete user
@@ -111,12 +129,12 @@ func PatchUser(context *gin.Context) {
 // @Router /users/{user_id} [delete]
 func DeleteUser(context *gin.Context) {
 	userId := context.Param("user_id")
-	var user []*models.User
-	user_res := database.DB.First(&user, userId)
-	if user_res.Error != nil {
+	var user models.User
+	userRepo := repositories.NewUserRepository(database.DB)
+	userRes := userRepo.Delete(userId, &user)
+	if userRes != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "failed to retrieve user"})
 		return
 	}
-	database.DB.Delete(&user)
 	context.JSON(http.StatusOK, gin.H{"success": "user successfully deleted from the database", "data": user})
 }

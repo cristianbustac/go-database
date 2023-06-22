@@ -1,4 +1,28 @@
 definitions:
+  schemas.Project:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  schemas.ProjectUpdate:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  schemas.Role:
+    properties:
+      name:
+        type: string
+    type: object
+  schemas.RoleUpdate:
+    properties:
+      name:
+        type: string
+    type: object
   schemas.User:
     properties:
       lastname:
@@ -31,11 +55,126 @@ paths:
       summary: health check
       tags:
       - health check
+  /projects:
+    get:
+      consumes:
+      - application/json
+      description: gets all projects
+      parameters:
+      - default: 0
+        description: skip
+        in: query
+        name: skip
+        type: integer
+      - default: 10
+        description: limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: get projects
+      tags:
+      - projects
+    post:
+      consumes:
+      - application/json
+      description: create a project
+      parameters:
+      - description: project JSON
+        in: body
+        name: project
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.Project'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: post project
+      tags:
+      - projects
+  /projects/{project_id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a project
+      parameters:
+      - description: Project ID
+        in: path
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: delete project
+      tags:
+      - projects
+    get:
+      consumes:
+      - application/json
+      description: gets project by id
+      parameters:
+      - description: Project ID
+        in: path
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: get project
+      tags:
+      - projects
+    patch:
+      consumes:
+      - application/json
+      description: update a project
+      parameters:
+      - description: Project ID
+        in: path
+        name: project_id
+        required: true
+        type: integer
+      - description: project JSON
+        in: body
+        name: project
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.ProjectUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: patch project
+      tags:
+      - projects
   /roles:
     get:
       consumes:
       - application/json
       description: gets all roles
+      parameters:
+      - default: 0
+        description: skip
+        in: query
+        name: skip
+        type: integer
+      - default: 10
+        description: limit
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
@@ -48,6 +187,13 @@ paths:
       consumes:
       - application/json
       description: create a role
+      parameters:
+      - description: role JSON
+        in: body
+        name: role
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.Role'
       produces:
       - application/json
       responses:
@@ -61,6 +207,12 @@ paths:
       consumes:
       - application/json
       description: delete a role
+      parameters:
+      - description: Role ID
+        in: path
+        name: role_id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -73,6 +225,12 @@ paths:
       consumes:
       - application/json
       description: gets role by id
+      parameters:
+      - description: Role ID
+        in: path
+        name: role_id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -85,6 +243,18 @@ paths:
       consumes:
       - application/json
       description: update a role
+      parameters:
+      - description: Role ID
+        in: path
+        name: role_id
+        required: true
+        type: integer
+      - description: role JSON
+        in: body
+        name: role
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.RoleUpdate'
       produces:
       - application/json
       responses:
@@ -98,6 +268,17 @@ paths:
       consumes:
       - application/json
       description: gets all users
+      parameters:
+      - default: 0
+        description: skip
+        in: query
+        name: skip
+        type: integer
+      - default: 10
+        description: limit
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:

@@ -32,6 +32,8 @@ func main() {
 
 	routes.HealthRoutes(router)
 	routes.UserRoutes(router)
+	routes.RolesRoutes(router)
+	routes.ProjectsRoutes(router)
 
 	http.ListenAndServe(":8000", router)
 }

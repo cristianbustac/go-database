@@ -1,14 +1,15 @@
 package routes
 
-// import (
-// 	controller "go-backend/controllers"
+import (
+	controller "go-backend/controllers"
 
-// 	"github.com/gin-gonic/gin"
-// )
+	"github.com/gin-gonic/gin"
+)
 
-// func RolesRoutes(incomingRoutes *gin.Engine) {
-// 	incomingRoutes.GET("/roles", controller.GetRoles())
-// 	incomingRoutes.GET("/roles/:role_id", controller.GetRole())
-// 	incomingRoutes.POST("/roles", controller.CreateRole())
-// 	incomingRoutes.PATCH("/roles/:role_id", controller.UpdateRole())
-// }
+func RolesRoutes(incomingRoutes *gin.Engine) {
+	incomingRoutes.GET("/roles", controller.Getroles)
+	incomingRoutes.GET("/roles/:role_id", controller.Getrole)
+	incomingRoutes.POST("/roles", controller.Postrole)
+	incomingRoutes.PATCH("/roles/:role_id", controller.Patchrole)
+	incomingRoutes.DELETE("/roles/:role_id", controller.Deleterole)
+}
