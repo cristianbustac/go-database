@@ -4,6 +4,10 @@ import (
 	"gorm.io/gorm"
 )
 
+// En Go, una interfaz se define como un tipo con una lista de métodos,
+// sin proporcionar la implementación de esos métodos.
+// Cualquier tipo que implemente todos los métodos especificados en una
+
 type BaseRepository struct {
 	dbInstance *gorm.DB
 }

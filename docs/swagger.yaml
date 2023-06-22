@@ -367,4 +367,75 @@ paths:
       summary: patch user
       tags:
       - users
+  /users/{user_id}/roles/{role_id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete relation user role
+      parameters:
+      - description: Role ID
+        in: path
+        name: role_id
+        required: true
+        type: integer
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: delete relation user role
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: post relation user role
+      parameters:
+      - description: Role ID
+        in: path
+        name: role_id
+        required: true
+        type: integer
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: post relation user role
+      tags:
+      - users
+  /users/roles:
+    get:
+      consumes:
+      - application/json
+      description: gets all users roles
+      parameters:
+      - default: 0
+        description: skip
+        in: query
+        name: skip
+        type: integer
+      - default: 10
+        description: limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: get relation users roles
+      tags:
+      - users
 swagger: "2.0"

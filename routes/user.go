@@ -12,4 +12,7 @@ func UserRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.POST("/users", controller.PostUser)
 	incomingRoutes.PATCH("/users/:user_id", controller.PatchUser)
 	incomingRoutes.DELETE("/users/:user_id", controller.DeleteUser)
+	incomingRoutes.GET("/users/roles", controller.GetRelationsUsersRoles)
+	incomingRoutes.POST("/users/:user_id/roles/:role_id", controller.CreateRelationUserRole)
+	incomingRoutes.DELETE("/users/:user_id/roles/:role_id", controller.DeleteRelationUserRole)
 }
