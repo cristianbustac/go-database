@@ -1,0 +1,189 @@
+definitions:
+  schemas.User:
+    properties:
+      lastname:
+        type: string
+      name:
+        type: string
+    type: object
+  schemas.UserUpdate:
+    properties:
+      lastname:
+        type: string
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: health check
+      tags:
+      - health check
+  /roles:
+    get:
+      consumes:
+      - application/json
+      description: gets all roles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: get roles
+      tags:
+      - roles
+    post:
+      consumes:
+      - application/json
+      description: create a role
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: post role
+      tags:
+      - roles
+  /roles/{role_id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a role
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: delete role
+      tags:
+      - roles
+    get:
+      consumes:
+      - application/json
+      description: gets role by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: get role
+      tags:
+      - roles
+    patch:
+      consumes:
+      - application/json
+      description: update a role
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: patch role
+      tags:
+      - roles
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: gets all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: get users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: create a user
+      parameters:
+      - description: user JSON
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: post user
+      tags:
+      - users
+  /users/{user_id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a user
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: delete user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: gets user by id
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: get user
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: update a user
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: user JSON
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.UserUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: patch user
+      tags:
+      - users
+swagger: "2.0"

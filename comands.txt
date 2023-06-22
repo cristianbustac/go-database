@@ -1,0 +1,10 @@
+go mod init go-backend esto inicializa el proyecto
+go mod tidy trae los modulos
+go get -u github.com/gin-gonic/gin descarga framework gin
+ go get -u github.com/gorilla/mux  descarga mux encima de http
+go install github.com/cosmtrek/air@latest instala air para recargar
+air init para inicializa air en el proyecto
+air para correrlo
+go get -u gorm.io/gorm descarga gorm
+go get -u gorm.io/driver/postgres descarga driver de postgres en el proyecto
+
